@@ -1,1 +1,1 @@
-https://kata-blog-86ub.vercel.app/
+https://react-readux-blog.vercel.app/
