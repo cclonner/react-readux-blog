@@ -1,92 +1,12 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
 import { edit } from "../store/authSlice";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { BASE_URL } from "../service/config";
 import axios from "axios";
-
-const FormContainer = styled.div`
-  position: relative;
-  background: rgb(255, 255, 255);
-  border: 1px solid rgb(217, 217, 217);
-  box-shadow: rgba(0, 0, 0, 0.07) 0px 22px 106px, rgba(0, 0, 0, 0.05) 0px 9.19107px 44.2843px,
-    rgba(0, 0, 0, 0.043) 0px 4.91399px 23.6765px, rgba(0, 0, 0, 0.035) 0px 2.75474px 13.2728px,
-    rgba(0, 0, 0, 0.027) 0px 1.46302px 7.04911px, rgba(0, 0, 0, 0.02) 0px 0.608796px 2.93329px;
-  border-radius: 6px;
-  width: 384px;
-  margin: 10px auto 0;
-  box-sizing: border-box;
-  padding: 36px 32px 46px;
-  min-height: 374px;
-`;
-
-const Form = styled.form``;
-
-const FormTitle = styled.h3`
-  margin: 0px 0px 21px;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 28px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.75);
-`;
-
-const Input = styled.input`
-  font-family: inherit;
-  background: rgb(255, 255, 255);
-  border: 1px solid rgb(217, 217, 217);
-  border-radius: 4px;
-  color: rgba(0, 0, 0, 0.75);
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 8px 12px;
-`;
-
-const SubmitButton = styled.input.attrs({ type: "submit" })`
-  width: 100%;
-  box-sizing: border-box;
-  background: rgb(24, 144, 255);
-  border-radius: 4px;
-  padding: 8px 12px;
-  border: 1px solid rgb(24, 144, 255);
-  color: rgb(255, 255, 255);
-  cursor: pointer;
-  margin-top: 10px;
-  &:disabled {
-    background: rgba(24, 144, 255, 0.5);
-    border-color: rgba(24, 144, 255, 0.5);
-    // cursor: not-allowed;
-  }
-`;
-
-const IncorrectData = styled.span`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 22px;
-  color: rgb(245, 34, 45);
-`;
-
-const LabelContainer = styled.div`
-  margin-bottom: 12px;
-`;
-
-const TitleInput = styled.span`
-  margin-left: 10px;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 22px;
-  color: rgba(0, 0, 0, 0.75);
-`;
+import styles from "./EditProfileForm.module.scss";
 
 function EditProfileForm() {
   const [usernameInput, setUsernameInput] = useState("");
@@ -127,12 +47,11 @@ function EditProfileForm() {
         dispatch(edit(response.data));
         history.push("/");
       })
-      // eslint-disable-next-line no-shadow
-      .catch((error) => {
+      .catch(() => {
         setError(error.response.data.errors);
       });
   };
-  // запрос для отображения старых данных пользователя при переходе на редактирование.
+
   useEffect(() => {
     async function fetchData() {
       const token = localStorage.getItem("token");
@@ -148,7 +67,6 @@ function EditProfileForm() {
   }, []);
 
   useEffect(() => {
-    // проверяем корректность email и устанавливаем соответствующее значение ошибки
     if (email && !/\S+@\S+\.\S+/.test(email)) {
       setError("Email data is incorrect");
     } else {
@@ -157,13 +75,13 @@ function EditProfileForm() {
   }, [email]);
 
   return (
-    <FormContainer>
-      <FormTitle>Edit Profile</FormTitle>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <LabelContainer>
+    <div className={styles.formContainer}>
+      <h3 className={styles.formTitle}>Edit Profile</h3>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.labelContainer}>
           <label htmlFor="username">
-            <TitleInput>Username</TitleInput>
-            <Input
+            <span className={styles.titleInput}>Username</span>
+            <input
               value={usernameInput}
               type="text"
               name="username"
@@ -171,27 +89,29 @@ function EditProfileForm() {
                 required: "The field is required ",
               })}
               onChange={(event) => setUsernameInput(event.target.value)}
+              className={styles.input}
             />
-            {error?.username && <IncorrectData>{error?.username}</IncorrectData>}
+            {error?.username && <span className={styles.incorrectData}>{error?.username}</span>}
           </label>
-        </LabelContainer>
-        <LabelContainer>
+        </div>
+        <div className={styles.labelContainer}>
           <label htmlFor="email">
-            <TitleInput>Email address</TitleInput>
-            <Input
+            <span className={styles.titleInput}>Email address</span>
+            <input
               value={emailInput}
               type="email"
               name="email"
               {...register("email")}
               onChange={(event) => setEmailInput(event.target.value)}
+              className={styles.input}
             />
-            {error?.email && <IncorrectData>{error?.email}</IncorrectData>}
+            {error?.email && <span className={styles.incorrectData}>{error?.email}</span>}
           </label>
-        </LabelContainer>
-        <LabelContainer>
+        </div>
+        <div className={styles.labelContainer}>
           <label htmlFor="password">
-            <TitleInput>Password</TitleInput>
-            <Input
+            <span className={styles.titleInput}>Password</span>
+            <input
               type="password"
               name="password"
               {...register("password", {
@@ -205,15 +125,17 @@ function EditProfileForm() {
                   message: "Too long password",
                 },
               })}
+              className={styles.input}
             />
-            {errors?.password && <IncorrectData>{errors?.password?.message}</IncorrectData>}
+            {errors?.password && (
+              <span className={styles.incorrectData}>{errors?.password?.message}</span>
+            )}
           </label>
-        </LabelContainer>
-        <LabelContainer>
+        </div>
+        <div className={styles.labelContainer}>
           <label htmlFor="imageUrl">
-            <TitleInput>Avatar image (url)</TitleInput>
-            {/* <Input type="text" name="imageUrl" {...register("imageUrl")} /> */}
-            <Input
+            <span className={styles.titleInput}>Avatar image (url)</span>
+            <input
               type="text"
               name="imageUrl"
               {...register("imageUrl", {
@@ -223,13 +145,21 @@ function EditProfileForm() {
                   message: "Enter a valid image link",
                 },
               })}
+              className={styles.input}
             />
-            {errors.imageUrl && <IncorrectData>{errors.imageUrl.message}</IncorrectData>}
+            {errors.imageUrl && (
+              <span className={styles.incorrectData}>{errors.imageUrl.message}</span>
+            )}
           </label>
-        </LabelContainer>
-        <SubmitButton value="Confirm edit profile" disabled={!isValid} />
-      </Form>
-    </FormContainer>
+        </div>
+        <input
+          type="submit"
+          value="Confirm edit profile"
+          disabled={!isValid}
+          className={styles.submitButton}
+        />
+      </form>
+    </div>
   );
 }
 

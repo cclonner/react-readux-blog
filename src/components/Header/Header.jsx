@@ -40,7 +40,7 @@ function Header() {
                 className={styles.imageUser}
                 src={
                   image
-                    ? name.user.image
+                    ? `${name.user.image}`
                     : "https://static.productionready.io/images/smiley-cyrus.jpg"
                 }
               />

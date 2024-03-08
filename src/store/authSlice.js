@@ -32,13 +32,11 @@ export const fetchEditData = createAsyncThunk("auth/fetchRegister", async (userD
     body: JSON.stringify(userData),
   });
   const data = await response.json();
-  // в этом запросе при перезагрузке страницы токен обновлялся поэтому выбрасывало из учетки
   localStorage.setItem("data", JSON.stringify(data));
   localStorage.setItem("image", JSON.stringify(data.user.image));
   return data;
 });
 
-// при перезагрузке страницы, чтобы не выбрасывало
 export const initAuth = createAsyncThunk("auth/initAuth", async () => {
   const token = localStorage.getItem("token");
   if (token) {

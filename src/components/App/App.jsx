@@ -29,7 +29,6 @@ function App() {
   useEffect(() => {
     axios.get(getArticle(slug)).then(({ data }) => {
       setArticle(data.article);
-      console.log(data);
     });
   }, [slug]);
   return (

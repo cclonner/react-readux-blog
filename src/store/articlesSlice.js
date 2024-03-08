@@ -138,7 +138,7 @@ const articlesSlice = createSlice({
       state.articles = state.articles.map((article) =>
         article.slug === action.payload.slug ? action.payload : article
       );
-      localStorage.setItem(`like_${action.payload.slug}`, true); // сохраняем состояние лайка
+      localStorage.setItem(`like_${action.payload.slug}`, true);
     },
     [fetchLikeDelete.fulfilled]: (state, action) => {
       state.status = "resolved";

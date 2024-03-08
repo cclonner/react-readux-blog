@@ -53,7 +53,6 @@ function EditArticle() {
       setTitleInput(response?.data.article?.title);
       setShortInput(response?.data.article?.description);
       setBodyInput(response?.data.article?.body);
-      console.log(response?.data.article?.body);
       setTagsInput(response?.data.article?.tagList || []);
     }
     fetchData();
