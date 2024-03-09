@@ -12,7 +12,6 @@ function Header() {
   const history = useHistory();
   const name = JSON.parse(localStorage.getItem("data"));
   const image = name ? name.user.image : null;
-  console.log(name, "name", image, "image");
   const onClickLogout = () => {
     if (window.confirm("Вы точно хотите выйти?")) {
       dispatch(logout());

@@ -10,7 +10,6 @@ import styles from "./EditProfileForm.module.scss";
 
 function EditProfileForm() {
   const [cirrentUserData, setUserData] = useState({});
-  console.log(cirrentUserData);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
