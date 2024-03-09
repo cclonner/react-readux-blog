@@ -11,7 +11,8 @@ function Header() {
   const dispatch = useDispatch();
   const history = useHistory();
   const name = JSON.parse(localStorage.getItem("data"));
-  const image = JSON.parse(localStorage.getItem("image"));
+  const image = name ? name.user.image : null;
+  console.log(name, "name", image, "image");
   const onClickLogout = () => {
     if (window.confirm("Вы точно хотите выйти?")) {
       dispatch(logout());
@@ -38,11 +39,7 @@ function Header() {
               </Link>
               <img
                 className={styles.imageUser}
-                src={
-                  image
-                    ? `${name.user.image}`
-                    : "https://static.productionready.io/images/smiley-cyrus.jpg"
-                }
+                src={image || "https://static.productionready.io/images/smiley-cyrus.jpg"}
               />
               <button className={styles.buttonLogOut} onClick={onClickLogout}>
                 Log Out

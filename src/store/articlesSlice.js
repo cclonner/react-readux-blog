@@ -4,7 +4,11 @@ import { BASE_URL } from "../service/config";
 import axios from "axios";
 
 export const fetchArticles = createAsyncThunk("articles/fetchArticles", async (offset) => {
-  const response = await fetch(`${BASE_URL}articles?limit=5&offset=${offset}`);
+  const headers = {
+    "content-type": "application/json",
+    Authorization: `Token ${localStorage.getItem("token")}`,
+  };
+  const response = await fetch(`${BASE_URL}articles?limit=5&offset=${offset}`, { headers });
   if (!response.ok) {
     throw new Error("Server Error!");
   }

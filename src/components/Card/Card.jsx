@@ -30,11 +30,8 @@ function Card({
     if (isAuth) {
       if (!favorited) {
         dispatch(fetchLikeArticle(slug));
-        localStorage.setItem(`like_${slug}`, true);
-      }
-      if (favorited) {
+      } else {
         dispatch(fetchLikeDelete(slug));
-        localStorage.removeItem(`like_${slug}`);
       }
     } else {
       history.push("/");
@@ -48,11 +45,7 @@ function Card({
             {title.length > 30 ? trimText(title) : title}
           </span>
           <span className={styles.likeContainer} onClick={handleLikeClick}>
-            {localStorage.getItem(`like_${slug}`) ? (
-              <IoHeartSharp color={styles.red} />
-            ) : (
-              <IoHeartOutline />
-            )}
+            {favorited ? <IoHeartSharp color={styles.red} /> : <IoHeartOutline />}
             <span className={styles.likeCount}>{likesNumber}</span>
           </span>
         </div>
