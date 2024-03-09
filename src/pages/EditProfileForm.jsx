@@ -9,8 +9,8 @@ import axios from "axios";
 import styles from "./EditProfileForm.module.scss";
 
 function EditProfileForm() {
-  const [usernameInput, setUsernameInput] = useState("");
-  const [emailInput, setEmailInput] = useState("");
+  const [cirrentUserData, setUserData] = useState({});
+  console.log(cirrentUserData);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
@@ -28,10 +28,10 @@ function EditProfileForm() {
   const onSubmit = (data) => {
     const userData = {
       user: {
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        image: data.imageUrl,
+        username: data.username || cirrentUserData.username,
+        email: data.email || cirrentUserData.email,
+        password: data.password || "",
+        image: data.imageUrl || cirrentUserData.image,
       },
     };
     const token = localStorage.getItem("token");
@@ -60,8 +60,11 @@ function EditProfileForm() {
           Authorization: `Token ${token}`,
         },
       });
-      setUsernameInput(response.data.user.username);
-      setEmailInput(response.data.user.email);
+      setUserData({
+        username: response.data.user.username,
+        email: response.data.user.email,
+        image: response.data.user.image,
+      });
     }
     fetchData();
   }, []);
@@ -74,6 +77,10 @@ function EditProfileForm() {
     }
   }, [email]);
 
+  const handleInputChange = (e) => {
+    setUserData({ ...cirrentUserData, [e.target.name]: e.target.value });
+  };
+
   return (
     <div className={styles.formContainer}>
       <h3 className={styles.formTitle}>Edit Profile</h3>
@@ -82,13 +89,11 @@ function EditProfileForm() {
           <label htmlFor="username">
             <span className={styles.titleInput}>Username</span>
             <input
-              value={usernameInput}
+              value={cirrentUserData.username || ""}
               type="text"
               name="username"
-              {...register("username", {
-                required: "The field is required ",
-              })}
-              onChange={(event) => setUsernameInput(event.target.value)}
+              {...register("username")}
+              onChange={handleInputChange}
               className={styles.input}
             />
             {error?.username && <span className={styles.incorrectData}>{error?.username}</span>}
@@ -98,11 +103,11 @@ function EditProfileForm() {
           <label htmlFor="email">
             <span className={styles.titleInput}>Email address</span>
             <input
-              value={emailInput}
+              value={cirrentUserData.email || ""}
               type="email"
               name="email"
               {...register("email")}
-              onChange={(event) => setEmailInput(event.target.value)}
+              onChange={handleInputChange}
               className={styles.input}
             />
             {error?.email && <span className={styles.incorrectData}>{error?.email}</span>}
@@ -115,7 +120,6 @@ function EditProfileForm() {
               type="password"
               name="password"
               {...register("password", {
-                required: "The field is required ",
                 minLength: {
                   value: 6,
                   message: "Too short password",
@@ -136,10 +140,10 @@ function EditProfileForm() {
           <label htmlFor="imageUrl">
             <span className={styles.titleInput}>Avatar image (url)</span>
             <input
+              value={cirrentUserData.image || ""}
               type="text"
               name="imageUrl"
               {...register("imageUrl", {
-                required: "The field is required ",
                 pattern: {
                   value: /^(ftp|http|https):\/\/[^ "]+$/,
                   message: "Enter a valid image link",
