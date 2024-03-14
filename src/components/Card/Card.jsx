@@ -3,8 +3,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
+import _ from "lodash";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
-import trimText from "../../utils/truncate";
 import { fetchLikeArticle, fetchLikeDelete } from "../../store/articlesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsAuth } from "../../store/authSlice";
@@ -42,7 +42,7 @@ function Card({
       <div className={styles.cardLeft}>
         <div className={styles.titleContainer}>
           <span className={styles.cardTitle} onClick={onClick}>
-            {title.length > 30 ? trimText(title) : title}
+            {title.length > 30 ? _.truncate(title, { length: 30 }) : title}
           </span>
           <span className={styles.likeContainer} onClick={handleLikeClick}>
             {favorited ? <IoHeartSharp color={styles.red} /> : <IoHeartOutline />}
@@ -59,13 +59,13 @@ function Card({
         </div>
         <span className={styles.cardDescription}>
           {" "}
-          {description.length > 15 ? `${description.substring(0, 50)}...` : description}
+          {description.length > 15 ? _.truncate(description, { length: 75 }) : description}
         </span>
       </div>
       <div className={styles.cardRight}>
         <div className={styles.cardContainerRight}>
           <span className={styles.cardAuthor}>
-            {username.length > 15 ? `${username.substring(0, 10)}...` : username}
+            {username.length > 15 ? _.truncate(username, { length: 15 }) : username}
           </span>
           <span className={styles.cardDate}>
             {date ? format(new Date(date), "MMM dd, yyyy") : null}

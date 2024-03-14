@@ -13,7 +13,7 @@ function RegistrationForm() {
   const [errorPassword, setErrorPassword] = useState("");
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
-
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -28,6 +28,7 @@ function RegistrationForm() {
   const checked = watch("checkbox");
 
   const onSubmit = async (data) => {
+    setLoading(true);
     const userData = {
       user: {
         username: data.username,
@@ -41,7 +42,14 @@ function RegistrationForm() {
         dispatch(login(response.data));
       })
       .catch(() => {
-        setError(error.response.data.errors);
+        if (error.response && error.response.data && error.response.data.errors) {
+          setError(error.response.data.errors);
+        } else {
+          setError("An error occurred while processing your request.");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -140,7 +148,13 @@ function RegistrationForm() {
         {checked ? null : (
           <span className={styles.incorrectData}>You have to accept an agreement</span>
         )}
-        <input type="submit" className={styles.submitButton} value="Create" disabled={!isValid} />
+        <button
+          type="submit"
+          className={`${styles.submitButton} ${loading ? styles.loading : ""}`}
+          disabled={!isValid || loading}
+        >
+          <span style={{ display: loading ? "none" : "inline" }}>Create</span>
+        </button>
       </form>
       <p className={styles.footerTitle}>
         Already have an account?

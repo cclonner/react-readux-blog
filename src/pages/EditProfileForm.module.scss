@@ -22,7 +22,41 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.75);
 }
+.submitButton {
+  display: block;
+  width: 320px;
+  height: 35px;
+  box-sizing: border-box;
+  background: rgb(24, 144, 255);
+  border-radius: 4px;
+  padding: 8px 12px;
+  border: 1px solid rgb(24, 144, 255);
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  margin-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
 
+.submitButton.disabled {
+  background: rgba(24, 144, 255, 0.5);
+  border-color: rgba(24, 144, 255, 0.5);
+}
+
+.submitButton.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fff;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  opacity: 1;
+}
 .input {
   font-family: inherit;
   background: rgb(255, 255, 255);
@@ -74,4 +108,11 @@
   font-size: 14px;
   line-height: 22px;
   color: rgba(0, 0, 0, 0.75);
+}
+.hidden {
+  display: none;
+}
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }

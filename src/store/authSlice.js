@@ -1,8 +1,12 @@
 /* eslint-disable no-param-reassign */
-// /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL } from "../service/config";
 import axios from "axios";
+
+export const selectAuthData = (state) => state.auth.data;
+export const selectAuthStatus = (state) => state.auth.status;
+export const selectAuthError = (state) => state.auth.error;
+export const selectIsAuth = (state) => Boolean(state.auth.data);
 
 export const fetchAuth = createAsyncThunk("auth/fetchAuth", async (userData) => {
   const response = await axios.post(`${BASE_URL}users/login`, userData);
@@ -124,6 +128,5 @@ const authSlice = createSlice({
   },
 });
 
-export const selectIsAuth = (state) => Boolean(state.auth.data);
 export const { logout, login, edit } = authSlice.actions;
 export default authSlice.reducer;

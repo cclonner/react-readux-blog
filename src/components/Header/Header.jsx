@@ -5,6 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { selectIsAuth, logout } from "../../store/authSlice";
 import styles from "./Header.module.scss";
+import _ from "lodash";
 
 function Header() {
   const isAuth = useSelector(selectIsAuth);
@@ -33,7 +34,7 @@ function Header() {
               </Link>
               <Link className={styles.nameUser} to="/profile">
                 {name?.user?.username && name.user.username.length > 15
-                  ? `${name.user.username.substring(0, 10)}...`
+                  ? _.truncate(name.user.username, { length: 15 })
                   : name.user.username}
               </Link>
               <img

@@ -3,6 +3,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { BASE_URL } from "../service/config";
 import axios from "axios";
 
+export const selectArticles = (state) => state.articles.articles;
+export const selectArticle = (state) => state.articles.article;
+export const selectStatus = (state) => state.articles.status;
+export const selectError = (state) => state.articles.error;
+export const selectPage = (state) => state.articles.page;
+export const selectFlag = (state) => state.articles.flag;
+
 export const fetchArticles = createAsyncThunk("articles/fetchArticles", async (offset) => {
   const headers = {
     "content-type": "application/json",
@@ -41,9 +48,9 @@ export const fetchDeleteArticle = createAsyncThunk("articles/fetchDeleteArticle"
 });
 
 export const fetchEditArticle = createAsyncThunk("articles/fetchEditArticle", async (payload) => {
-  const { slug, userData } = payload;
+  const { slug } = payload;
   const token = localStorage.getItem("token");
-  const response = await axios.put(`https://blog.kata.academy/api/articles/${slug}`, userData, {
+  const response = await axios.put(`https://blog.kata.academy/api/articles/${slug}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Token ${token}`,

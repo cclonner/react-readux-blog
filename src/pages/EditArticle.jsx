@@ -19,6 +19,7 @@ function EditArticle() {
   const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -59,6 +60,7 @@ function EditArticle() {
   }, []);
 
   const onSubmit = (data) => {
+    setLoading(true);
     const slug = localStorage.getItem("slug");
 
     const payload = {
@@ -73,7 +75,19 @@ function EditArticle() {
       },
     };
 
-    dispatch(fetchEditArticle(payload));
+    dispatch(
+      fetchEditArticle(payload)
+        .catch((error) => {
+          if (error.response && error.response.data && error.response.data.errors) {
+            console.log(error.response.data.errors);
+          } else {
+            console.log("An error occurred while processing your request.");
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        })
+    );
     history.push(`/`);
   };
   if (!isAuth && !localStorage.getItem("token")) {
@@ -182,12 +196,13 @@ function EditArticle() {
             Add Tag
           </button>
         )}
-        <input
+        <button
           type="submit"
-          value="Confirm edit"
-          disabled={!isValid}
-          className={styles.submitButton}
-        />
+          className={`${styles.submitButton} ${loading ? styles.loading : ""}`}
+          disabled={!isValid || loading}
+        >
+          <span style={{ display: loading ? "none" : "inline" }}>Confirm edit</span>
+        </button>
       </form>
     </div>
   );

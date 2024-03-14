@@ -1,9 +1,8 @@
-/* eslint-disable no-shadow */
+/* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable react/button-has-type */
 import React, { useState, useEffect, useRef } from "react";
-import trimText from "../../utils/truncate";
+import _ from "lodash";
 import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
 import { format } from "date-fns";
 import ReactMarkdown from "react-markdown";
@@ -87,7 +86,7 @@ function Info(props) {
   };
 
   useEffect(() => {
-    axios.get(getArticle(slug)).then(({ data }) => setArticle(data.article));
+    axios.get(getArticle(slug)).then(() => setArticle(data.article));
   }, []);
 
   useEffect(() => {
@@ -100,7 +99,7 @@ function Info(props) {
         <div className={styles.cardLeft}>
           <div className={styles.titleContainer}>
             <span className={styles.cardTitle} onClick={onClick}>
-              {title.length > 30 ? trimText(title) : title}
+              {title.length > 30 ? _.truncate(title, { length: 30 }) : title}
             </span>
             <span className={styles.likeContainer} onClick={handleLikeClick}>
               {isLiked ? <IoHeartSharp color="red" /> : <IoHeartOutline />}

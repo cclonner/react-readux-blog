@@ -11,7 +11,7 @@ function LoginForm() {
   const [errorPass, setErrorPass] = useState("");
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
-
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -25,17 +25,29 @@ function LoginForm() {
   const email = watch("email");
 
   const onSubmit = (data) => {
+    setLoading(true);
     const userData = {
       user: {
         email: data.email,
         password: data.password,
       },
     };
-    dispatch(fetchAuth(userData)).then((result) => {
-      if (!result.payload) {
-        setErrorPass("Incorrect password");
-      }
-    });
+    dispatch(fetchAuth(userData))
+      .then((result) => {
+        if (!result.payload) {
+          setErrorPass("Incorrect password");
+        }
+      })
+      .catch(() => {
+        if (error.response && error.response.data && error.response.data.errors) {
+          setError(error.response.data.errors);
+        } else {
+          setError("An error occurred while processing your request.");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -76,7 +88,13 @@ function LoginForm() {
           </label>
         </div>
 
-        <input type="submit" className={styles.submitButton} value="Log in" disabled={!isValid} />
+        <button
+          type="submit"
+          className={`${styles.submitButton} ${loading ? styles.loading : ""}`}
+          disabled={!isValid || loading}
+        >
+          <span style={{ display: loading ? "none" : "inline" }}>Login</span>
+        </button>
       </form>
     </div>
   );

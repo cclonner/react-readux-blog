@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
 import styles from "./Main.module.scss";
+import { selectArticles, selectStatus } from "../../store/articlesSlice";
 
 function Main({ children }) {
-  const status = useSelector((state) => state.articles.status);
-  const articles = useSelector((state) => state.articles.articles);
+  const status = useSelector(selectStatus);
+  const articles = useSelector(selectArticles);
   const loading = articles.length === 0 && status === "loading" && (
     <div className={styles.Spinner} />
   );

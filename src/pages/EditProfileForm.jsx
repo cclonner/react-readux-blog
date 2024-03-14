@@ -13,6 +13,7 @@ function EditProfileForm() {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -25,6 +26,7 @@ function EditProfileForm() {
   const email = watch("email");
 
   const onSubmit = (data) => {
+    setLoading(true);
     const userData = {
       user: {
         username: data.username || cirrentUserData.username,
@@ -47,7 +49,14 @@ function EditProfileForm() {
         history.push("/");
       })
       .catch(() => {
-        setError(error.response.data.errors);
+        if (error.response && error.response.data && error.response.data.errors) {
+          setError(error.response.data.errors);
+        } else {
+          setError("An error occurred while processing your request.");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -155,12 +164,13 @@ function EditProfileForm() {
             )}
           </label>
         </div>
-        <input
+        <button
           type="submit"
-          value="Confirm edit profile"
-          disabled={!isValid}
-          className={styles.submitButton}
-        />
+          className={`${styles.submitButton} ${loading ? styles.loading : ""}`}
+          disabled={!isValid || loading}
+        >
+          <span style={{ display: loading ? "none" : "inline" }}>Confirm edit profile</span>
+        </button>
       </form>
     </div>
   );
